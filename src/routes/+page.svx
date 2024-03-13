@@ -1,0 +1,9 @@
+
+
+# Playground
+
+This is a repo of prototypes + experiments + works in progress
+
+
+- [Plate Assay interface / API experiment](/plates)
+- [Currency Converter post](/currencies)
