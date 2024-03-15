@@ -52,8 +52,6 @@
   toList[2].checked = true
   toList[3].checked = true
 
-  $: console.log('fromList', fromList, 'toList', toList)
-
 
   let errorMessages, message=' ', requests=[], results=[], result;
   export let amount = 100

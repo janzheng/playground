@@ -73,7 +73,7 @@
       }
       console.log('Sending data...', postData);
       requests = [...requests, postData];
-      const response = await fetch('currencies/api/convert', {
+      const response = await fetch('/currencies/api/convert', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

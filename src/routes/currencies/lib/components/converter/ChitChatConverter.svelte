@@ -19,7 +19,7 @@
         mode: "loopPrompt"
       }
       requests = [...requests, postData];
-      const response = await fetch('currencies/api/chat', {
+      const response = await fetch('/currencies/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

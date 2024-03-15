@@ -59,8 +59,6 @@
   toList[2].checked = true
   toList[3].checked = true
 
-  $: console.log('fromList', fromList, 'toList', toList)
-
 
   let errorMessages, message=' ', requests=[], results=[], result;
   export let amount = 100
@@ -196,7 +194,7 @@
       }
       console.log('Sending data...', postData);
       requests = [...requests, postData];
-      const response = await fetch('currencies/api/convert', {
+      const response = await fetch('/currencies/api/convert', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
