@@ -1,0 +1,10 @@
+<script lang="ts">
+  import { marked } from 'marked';
+  import BasicConverter from '$routes/currencies/lib/components/converter/BasicConverter.svelte';
+  import ChatConverter from '$routes/currencies/lib/components/converter/ChatConverter.svelte';
+  import ChitChatConverter from '$routes/currencies/lib/components/converter/ChitChatConverter.svelte';
+  import RubeConverter from '$routes/currencies/lib/components/converter/RubeConverter.svelte';
+  import ConciergeConverter from '$routes/currencies/lib/components/converter/ConciergeConverter.svelte';
+</script>
+
+<BasicConverter />

@@ -86,9 +86,10 @@
         message = "Oops!"
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
-        message = 'Converted!';
         results = [...results,await response.json()];
         console.log('results', results)
+        // let result = await response.json()
+        // message = `Total amount in ${$to$}: ${currencies.filter(cur => cur.value === $from$)[0].symbol}${result.result}`;
       }
     } catch (error) {
       console.error('An error occurred while converting:', error);
@@ -104,7 +105,8 @@
 
   <div class="ui-group flex flex-row items-center gap-1">
 
-    <Input type="number" placeholder="Amount" class="w-24 inline-block" bind:value="{$amount$}" />
+    <span class="pr-1 text-sm text-gray-500">{currencies.filter(cur => cur.value === $from$)[0].symbol}</span>
+    <Input type="number" placeholder="Amount" class="w-14 px-2 pb-[9px]" bind:value="{$amount$}" />
   
     <Popover.Root bind:open={fromOpen} let:ids>
       <Popover.Trigger asChild let:builder>
@@ -113,13 +115,13 @@
           variant="outline"
           role="combobox"
           aria-expanded={fromOpen}
-          class="w-[200px] justify-between"
+          class="min-w-[70px] px-2 justify-between"
         >
           <!-- {currencies.filter(cur => cur.value === $from$)[0].symbol} -->
           <span>{$from$}</span>
-          <span class="text-sm text-gray-500 baseline">
+          <!-- <span class="text-sm text-gray-500 baseline">
             {currencies.filter(cur => cur.value === $from$)[0].name}
-          </span>
+          </span> -->
           <ChevronDown class="h-4 w-4" />
         </Button>
       </Popover.Trigger>
@@ -149,16 +151,15 @@
       </Popover.Content>
     </Popover.Root>
       
-  
     <Button 
       on:click={() => {
         currencySwap();
       }}
       variant="outline" 
-      class="cursor-pointer w-10 h-10 ` && 'active border-blue-500 border-2'}"
+      class="hidden md:inline-flex  px-0 cursor-pointer w-10 h-10 ` && 'active border-blue-500 border-2'}"
         >
-      <Label class="cursor-pointer">
-        <Width class="h-4 w-4" />
+      <Label class="cursor-pointer text-center">
+        <Width class="h-4 w-4 text-center" />
       </Label>
     </Button>
   
@@ -169,12 +170,12 @@
           variant="outline"
           role="combobox"
           aria-expanded={toOpen}
-          class="w-[200px] justify-between"
+          class="min-w-[70px] px-2 justify-between"
         >
           <span>{$to$}</span>
-          <span class="text-sm text-gray-500 baseline">
+          <!-- <span class="text-sm text-gray-500 baseline">
             {currencies.filter(cur => cur.value === $to$)[0].name}
-          </span>
+          </span> -->
           <ChevronDown class="h-4 w-4" />
         </Button>
       </Popover.Trigger>
@@ -209,7 +210,7 @@
         <Button
           variant="outline"
           class={cn(
-            "min-w-[100] md:w-[240px] justify-start text-left font-normal",
+            "min-w-[100px] px-1 md:px-4 md:w-[240px] justify-start text-left font-normal overflow-hidden",
             !$date$ && "text-muted-foreground"
           )}
           builders={[builder]}
@@ -267,16 +268,16 @@
       </Button>
   </div>
 
-  {#if message}
+  <!-- {#if message}
     <div class="message-group | text-sm rounded-md my-4 p-4 bg-slate-100">
       {message||''}
     </div>
-  {/if}
+  {/if} -->
 
   {#if requests && requests.length > 0}
     <div class="message-group | text-sm rounded-md my-4 p-4 bg-slate-100">
       <h3>Requests</h3>
-      {#each requests as request}
+      {#each requests.reverse() as request}
         <div class="my-4">
           <pre class="bg-slate-100">{JSON.stringify(request, 0, 2)}</pre>
         </div>
@@ -287,19 +288,11 @@
   {#if results && results.length > 0}
     <div class="message-group | text-sm rounded-md my-4 p-4 bg-slate-100">
       <h3>Results</h3>
-      {#each results as result}
+      {#each results.reverse() as result}
         <div class="my-4">
           <pre class="bg-slate-100">{JSON.stringify(result, 0, 2)}</pre>
         </div>
       {/each}
-    </div>
-  {/if}
-
-  {#if errorMessages} 
-    <div class="errors mt-4">
-      <div class="text-xl text-red-500">Ugly error log</div>
-      <div class="mb-2">Normally if we use proper form validation, we'd have "touched" but here we just want to see what's going on in real time</div>
-      <pre class="error-log ">{JSON.stringify(errorMessages, null, 2)}</pre>
     </div>
   {/if}
 

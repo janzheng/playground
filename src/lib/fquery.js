@@ -410,6 +410,8 @@ export const fQuery = (config) => {
             if (typeof (input) == "string") input += " Please write your response in correct JSON"
             if (Array.isArray(input)) input[input.length - 1].content += " Please write your response in correct JSON"
             output = await getResult(input);
+          } else {
+            jsonOutput = {status: 'error'} // stop trying, but return the data for tracing
           }
         }
       }
@@ -493,7 +495,10 @@ export const fQuery = (config) => {
     // availableFunctions is an object w; { fnName: { schema, fn }}
     // all args are sent in one obj (first arg)
     // showReply = respond w/ LLM
-    const runFunc = async (input, { inputConfig, availableFunctions, replyMode }) => {
+    const runFunc = async (input, { inputConfig, availableFunctions, replyMode }={}) => {
+
+
+      console.log('===>>> runFunc?!?!?!?', input, availableFunctions)
       if (!availableFunctions) {
         throw new Error('[llm/json] no available functions specified')
       }
@@ -604,6 +609,7 @@ export const fQuery = (config) => {
     // wrapper to write continuous function calling
     // until there are no more function that can responsd
     const runFuncLoop = async (input, { inputConfig, availableFunctions }) => {
+
       let messages
       if (!Array.isArray(input)) {
         messages = [input]

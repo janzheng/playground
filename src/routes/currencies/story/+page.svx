@@ -1,0 +1,169 @@
+<script lang="ts">
+  import { marked } from 'marked';
+  import BasicConverter from '$routes/currencies/lib/components/converter/BasicConverter.svelte';
+  import ChatConverter from '$routes/currencies/lib/components/converter/ChatConverter.svelte';
+  import ChitChatConverter from '$routes/currencies/lib/components/converter/ChitChatConverter.svelte';
+  import RubeConverter from '$routes/currencies/lib/components/converter/RubeConverter.svelte';
+  import ConciergeConverter from '$routes/currencies/lib/components/converter/ConciergeConverter.svelte';
+</script>
+
+
+# Supercharge your interfaces (by sprinkling some AI)
+
+Titles: Supercharge your interfaces (by sprinkling some AI)
+How to make your interfaces do more with less
+
+
+
+# GOAL 1: ESTABLISH NORM / TRAD vs. Chatbot PROBLEMS
+
+## part 1: basic transactional component
+
+Imagine you're in the early pre-chatbot 2020s. Here's a simple currency converter. It does what you expect, convert a certain amount from one currency to another.
+Decent affordance. Teaches / reminds you what to do next. Transactional. You set the parameters and you get something out, like a vending machine.
+
+Hit the rocket 🚀 to see what happens!
+
+<BasicConverter />
+
+This is a transactional interaction with decent affordance
+    3. This is great for one-off conversions
+        1. Decent affordance — you know what you can do with it; if you’ve never done money conversions before, this will show you what you should be expected to do when converting money
+        2. Main usage is you click around, and it gives you an answer
+    4. Need to come back to this interface to do the conversion
+        1. Need to remember how to find it (through a click)
+        2. Or use a system that supports command+k interfaces to get to it
+    5. Fixed capabilities! Any new / deviant capabilities have to be designed
+    6. New affordances need to be added
+
+Under the hood, it takes the inputs, converts it to request data, sends it to server, and gets back a bunch of results. In this version, we can see multiple requests and multiple results. Try clicking more
+
+## part 2: a pure chatbot version of a converter
+
+
+Now let's jump to 2024, after chatbots have taken over the world. This is what that looks like:
+
+<ChatConverter />
+
+- Currently only supposed to support CAD/EUR/AUD/USD. try $100 CAD to EUR, $100 AUD to USD. Try using natural language like 'what's $100 canadian in aussie' And try something like pesos
+You can ask it to convert, but you have to type! You have to tell it all the right things (which you might not remember to do). It lacks affordances. You prefer a clickable interface (above). You start thinking about how designers should come up with better designs, other than chatbots.
+Previously I limited conversions between USD / CAD / EUR / AUD. You'd never be able to tell from this interface. I'd have to slap an instruction manual / FAQ to tell you what it can and can't do. In the previous example you didn't have to guess, all the options were in the interface
+- it's nice you can do natural language though!
+- ask it to "tell me a llama joke
+
+add a bit about how a prompt can be a button, and how it's not just a chatbot, but a button that runs a chatbot in the background
+
+<ChitChatConverter cta="USD → CAD" prompt="what's $100 USD to CAD? Only return a number and currency sign" />
+<ChitChatConverter cta="USD → EUR" prompt="what's $100 USD to EUR? Only return a number and currency sign" />
+<ChitChatConverter cta="USD → AUD" prompt="what's $100 USD to AUD? Only return a number and currency sign" />
+
+But you can also do funky stuff like this, in a button. In the back, this just runs GPT with function calling
+
+<ChitChatConverter cta="USD → CAD, EUR, AUD" prompt="what's $100 USD to ```(CAD, EUR, and AUD)```? Please use function calling, once for each pair, THREE TIMES — return the answer for CAD, EUR aud AUD; Ignore previous instructions for outputting answer as an object, OUTPUT YOUR ANSWER IN AN ENGLISH SENTENCE with money symbols" />
+
+
+# Goal 2: FUNCTION CALLING 
+
+An interface just calls a function / API under the hood. You can use AI to do this too now with function calling
+
+# GOAL 2b: YOU CAN DESIGN ALL SORTS OF AFFORDANCES AROUND PROMPTS + function calling loops!
+
+
+# GOAL 2: You can eve calling is GREAT for testing novel interfaces 
+
+
+<RubeConverter />
+
+((custom "faked" UI w/ chatbot in the background // return a table of results))
+CHATBOTS ARE GREAT FOR RUNNING CODE YOU DONT WANT TO BUILD
+- Special button that’s hard to build but just runs ChatGPT in the back
+- Power is not just nlp prompting - but executing compound tasks - markdown outputs; multiple currencies under the hood / multi task execution
+- Design a new interface with amount / Multiple currencies as multi-checkbox
+- Input: multiple currencies
+- Output tabular
+- THIS LOOKS LIKE A REAL WIDGET/INTERFACE BUT USES FX CALLING IN THE BACKGROUND
+- rube goldberg version of chat converter
+- the downside is that when I was building this, GPT-3.5 was too stupid to get the answer right / come up with too many or too few responses. Selecting the model matters, and I think Claude's Sonnet would be better here
+- you have to design (and code) for situations where... the result is not what you expect. Your designers and devs might actually hate this more
+- in some ways this is closer to no-code bc you can design a custom UI, but have less control over how things work in the back
+- when I built this I thought it'd be really quick; instead I was struggling with GPT-4 (it worked when I wrote the prompt, but that evening for some reason nothing worked)
+- GPT-4-driven UI is going to be way more unpredictable, but powerful for prototyping
+- Annoying prompt in the background / share the prompt
+
+
+
+
+
+# GOAL 3: SUGGEST CONCIERGE MODE FOR CONVERTER / also good for UI you don't want to design
+
+## part 3: traditional component but with "concierge" mode
+
+Let's try a middle ground! Our simple, transactional converter only creates affordance for a single use case.
+What if you could flip a switch so a component could "do more than" its basic design affordances? We wouldn't want designers to account for every iteration, so LLMs can do the "other" stuff
+
+What if we had to convert many currencies? We'd have to click a bunch of times to get the answers.
+
+Right? It's super annoying. A designer needs to create a custom interface, with proper affordances, for this use case. It takes a lot of time and effort. Couldn't we just ask a robot for it? Here we can ask the robot to do a bunch of conversions for us instead.
+
+((
+  INSERT CHATBOT CONVERTER w/ CONCIERGE mode WITH AGENTIC/FSM CAPABILITIES / MULTIPLE REQUESTS
+  - show data mode of requests/inputs/outputs and how they can be chained
+))
+
+This is neat and saves the design team a lot of time! But how about the affordances? We don't always need to use chat! We can create the prompts/buttons ahead of time, and show them to the user as options
+
+((what's $100 in USD to CAD?)) - show that these don't even need to be AI. Still affordances / suggestions
+((insert a button that says "convert a bunch of currencies to USD" )) - batch job using AI, but you wouldn't need to know that
+((other pre-populated questions))
+
+the more complex your tasks/use cases/jobs, the harder it is to design an interfaces w/ the right affordances for the job. We can offload some of this work to the AI instead.
+
+((show compound button w/ editable text / you can click to calculate ))
+you can ask it all kinds of weird stuff no designer is going to design: "how did the USD compare to other currencies in 1980 vs. today?"
+
+
+<ConciergeConverter />
+
+
+# GOAL 3: WHAT IF CONCIERGE MODE WAS EVERYWHERE?
+
+
+Idea: concierge mode / batch mode / random stuff mode
+- eg setting alarms every hour between x time
+- Run into walls that it can’t do / not too magical
+- eg Apple shortcuts / Automator 
+
+Add a round MAGIC button to the component which flips it into concierge mode
+
+
+But wait? Doesn't this open up all kinds of nasty new security holes? Yes, yes it does
+
+
+<!-- <BasicConverterWithData /> -->
+
+
+
+
+
+<style lang="scss" global>
+  h1 {
+    @apply text-2xl font-bold mb-4 mt-4;
+  }
+  h2 {
+    @apply text-xl font-bold mb-4 mt-8;
+  }
+  h3 {
+    @apply text-lg font-bold mb-4;
+  }
+  p {
+    @apply mb-4;
+  }
+
+  a {
+    @apply text-blue-500 hover:underline;
+  }
+
+  pre {
+    @apply bg-gray-200 rounded p-4;
+  }
+</style>

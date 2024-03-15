@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="layout container">
+<div class="layout">
   <slot />
 </div>
 
